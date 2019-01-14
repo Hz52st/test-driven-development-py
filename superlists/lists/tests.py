@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import resolve
 from django.http import HttpRequest
+from django.template.loader import render_to_string
+
 from lists.views import home_page
 
 # Create your tests here.
@@ -23,7 +25,13 @@ class HomePageTest(TestCase):
 		html = response.content.decode('utf8')
 		self.assertTrue(html.startswith('<html>'))
 		self.assertIn('<title>To-Do lists</title>', html)
-		self.assertTrue(html.endswith('</html>'))	
+		self.assertTrue(html.endswith('</html>'))
+
+	def test_home_page_return_corrent_html2(self):
+		request = HttpRequest()
+		response = home_page(request)
+		expected_html = render_to_string('home.html')
+		self.assertEqual(response.content.decode(), expected_html)
 
 
 
