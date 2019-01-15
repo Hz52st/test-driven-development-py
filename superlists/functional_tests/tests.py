@@ -29,6 +29,9 @@ class NewVisitorTest(LiveServerTestCase):
 
 		inputbox.send_keys('Buy peacock feathers')
 		inputbox.send_keys(Keys.ENTER)
+		edith_list_url = self.browser.current_url
+		self.assertRegex(edith_list_url, '/lists/.+')
+		self.check_for_row_in_list_table('1: Buy peacock feathers')
 		time.sleep(3)
 
 		inputbox = self.browser.find_element_by_id('id_new_item')
@@ -40,6 +43,9 @@ class NewVisitorTest(LiveServerTestCase):
 
 		rows = table.find_elements_by_tag_name('tr')
 
+		self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
+		self.check_for_row_in_list_table('1: Buy peacock feathers')
+
 		self.assertIn('1: Buy peacock feathers', [row.text for row in rows])	
 
 		# self.assertTrue(
@@ -48,6 +54,31 @@ class NewVisitorTest(LiveServerTestCase):
 		# )
 
 		self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])	
+
+
+		self.browser.quit()
+		self.browser = webdriver.Firefox()
+
+		self.browser.get(self.live_server_url)
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertIn('Buy peacock feathers', page_text)
+		self.assertIn('make a fly', page_text)
+
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox = self.send_keys('Buy milk')
+		inputbox.send_keys(Keys.ENTER)
+
+		francis_list_url = self.browser.current_url
+		self.assertRegex(francis_list_url, '/list/.+')
+		self.assertNotEqual(francis_list_url, edith_list_url)
+
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('Buy peacock feathers', page_text)
+		self.assertIn('Buy milk', page_text)
+
+		
+
+
 
 		self.fail("Finish the test!")
 
