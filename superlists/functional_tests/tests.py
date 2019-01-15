@@ -53,26 +53,16 @@ class NewVisitorTest(LiveServerTestCase):
 		self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 		self.check_for_row_in_list_table('1: Buy peacock feathers')
 
-		self.assertIn('1: Buy peacock feathers', [row.text for row in rows])	
-
-		# self.assertTrue(
-		# 	any(row.text == '1: Buy peacock feathers' for row in rows),
-		# 	'New to-do item did not appear in table -- its text was: \n%s' % (table.text, ),
-		# )
-
-		self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])	
-
-
 		self.browser.quit()
 		self.browser = webdriver.Firefox()
 
 		self.browser.get(self.live_server_url)
 		page_text = self.browser.find_element_by_tag_name('body').text
-		self.assertIn('Buy peacock feathers', page_text)
-		self.assertIn('make a fly', page_text)
+		self.assertNotIn('Buy peacock feathers', page_text)
+		self.assertNotIn('make a fly', page_text)
 
 		inputbox = self.browser.find_element_by_id('id_new_item')
-		inputbox = self.send_keys('Buy milk')
+		inputbox.send_keys('Buy milk')
 		inputbox.send_keys(Keys.ENTER)
 		time.sleep(1)
 
