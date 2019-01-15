@@ -3,12 +3,20 @@ from django.http import HttpResponse
 from django.template.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from lists.models import Item
+from lists.models import Item, List
 
 # Create your views here.
 
 def home_page(request):
 	return render(request, 'home.html')
+
+
+def new_list(request):
+	new_item_text = request.POST.get('item_text', '')
+	list_ =List.objects.create()
+	Item.objects.create(text=new_item_text, list=list_)
+	return redirect('/lists/the-only-list-in-the-world/')
+
 
 def view_list(request):
 	items = Item.objects.all()
@@ -16,7 +24,3 @@ def view_list(request):
 		request, 'list.html', {'items': items}
 	)
 
-def new_list(request):
-	new_item_text = request.POST.get('item_text', '')
-	Item.objects.create(text=new_item_text)
-	return redirect('/lists/the-only-list-in-the-world/')
