@@ -31,7 +31,6 @@ class NewVisitorTest(unittest.TestCase):
 		time.sleep(3)
 
 		table = self.browser.find_element_by_id('id_list_table')
-		time.sleep(3)
 
 		rows = table.find_elements_by_tag_name('tr')
 
