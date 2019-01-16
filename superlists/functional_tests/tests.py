@@ -92,7 +92,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		self.assertAlmostEqual(
 			inputbox.location['x'] + inputbox.size['width'] / 2,
-			self.browser.get_window_size().get("width")/2,
+			self.browser.get_window_size().get("width")/2, # 不能直接写1024/2 ，因为selenium设置的大小不准确
 			delta=5
         )
 
