@@ -1,0 +1,10 @@
+#id_new_item{
+	margin-top: 2ex;
+}
+
+.col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
